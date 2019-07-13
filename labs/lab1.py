@@ -1,5 +1,6 @@
 import time
 import random
+import math
 
 #---------------
 # Set up
@@ -25,7 +26,6 @@ def create_array(s, n):
 # Algorithms 
 #---------------
 
-# Freddies algorithm is not checking the last element!!
 def freddy(array):
 	time_1 = time.clock()
 	max_num = 0
@@ -52,6 +52,39 @@ def sophie(array):
 	time_2 = time.clock()
 	print(f'Max Sum = {max_num}, Time taken = {time_2 - time_1}')
 	return max_num
+
+def johnny(array, left, right):
+	if left == right:
+		if array[left] > 0:
+			return array[left]
+		return 0
+
+	# Split array in half and find each halfs max sum
+	center = math.floor((left + right) / 2)
+	max_left_sum = johnny(array, left, center)
+	max_right_sum = johnny(array, center+1, right)
+	print(f'Left sum {max_left_sum} Right sum {max_right_sum}')
+
+	# Find max starting at center moving left
+	max_left_border = 0
+	left_border = 0
+	for i in range(center, left-1, -1):
+		left_border += array[i]
+		if left_border > max_left_border:
+			max_left_border = left_border
+
+	# Find max starting at center moving right
+	max_right_border = 0
+	right_border = 0
+	for i in range(center, right+1):
+		right_border += array[i]
+		if right_border > max_right_border:
+			max_right_border = right_border
+
+	print(f'Max left: {max_left_sum} Max right: {max_right_sum}')
+
+	# the max sum is the largest of the three
+	return max(max_left_sum, max_right_sum, max_left_border+max_right_border)
 
 def sally(array):
 	time_1 = time.clock()
@@ -91,9 +124,13 @@ def main():
 	# Run Sophie algorithm
 	sophie(array)
 
+	# Run Johnny algorithm
+	max_num = johnny(array, 0, len(array))
+	print(f'Johnny max {max_num}')
+
 	# Run Sally algorithm
 	sally(array)
 
-	
+
 if __name__ == '__main__':
 	main()
