@@ -165,42 +165,57 @@ def test_main():
 # Main
 #---------------
 def main():
-	# Display Menu
-	user_input = menu()
-	print(f'You chose: {user_input}')
+	user_input = ''
 
-	# Collect seed and array size
-	seed, size = collect_input()
-	print(f'Seed: {seed}, Size: {size}')
+	while user_input != '1':
+		# Display Menu/Collect input
+		user_input = menu()
+		print(f'You chose: {user_input}')
 
-	# Create the array 
-	array = create_array(seed, size)
-	print(array)
+		if user_input == '1':
+			print('Exiting')
 
-	# Run Freddy algorithm
-	time_1 = time.perf_counter_ns()
-	max_num	= freddy(array)
-	elapsed_time = time.perf_counter_ns() - time_1
-	print(f'Max sum {max_num}, Elapsed Time {elapsed_time}')
+		else:
 
-	# Run Susie algorithm
-	time_1 = time.perf_counter_ns()
-	max_num = susie(array)
-	elapsed_time = time.perf_counter_ns() - time_1
-	print(f'Max sum {max_num}, Elapsed Time {elapsed_time}')
+			# Collect seed and array size
+			seed, size = collect_input()
+			print(f'Seed: {seed}, Size: {size}')
 
-	# Run Johnny algorithm
-	time_1 = time.perf_counter_ns()
-	max_num = johnny(array, 0, len(array)-1)
-	elapsed_time = time.perf_counter_ns() - time_1
-	print(f'Max sum {max_num}, Elapsed Time {elapsed_time}')
+			# Create the array 
+			array = create_array(seed, size)
 
-	# Run Sally algorithm
-	time_1 = time.perf_counter_ns()
-	max_num = sally(array)
-	elapsed_time = time.perf_counter_ns() - time_1
-	print(f'Max sum {max_num}, Elapsed Time {elapsed_time}')
+		if user_input == '2':
+
+			# Run Freddy algorithm
+			time_1 = time.clock()
+			max_num	= freddy(array)
+			elapsed_time = time.clock() - time_1
+			print(f'Max sum {max_num}, Elapsed Time {format(elapsed_time, ".3e")}')
+
+		elif user_input == '3':
+
+			# Run Susie algorithm
+			time_1 = time.clock()
+			max_num = susie(array)
+			elapsed_time = time.clock() - time_1
+			print(f'Max sum {max_num}, Elapsed Time {format(elapsed_time, ".3e")}')
+
+		elif user_input == '4':
+
+			# Run Johnny algorithm
+			time_1 = time.clock()
+			max_num = johnny(array, 0, len(array)-1)
+			elapsed_time = time.clock() - time_1
+			print(f'Max sum {max_num}, Elapsed Time {format(elapsed_time, ".3e")}')
+
+		elif user_input == '5':
+			# Run Sally algorithm
+			time_1 = time.clock()
+			max_num = sally(array)
+			elapsed_time = time.clock() - time_1
+			print(f'Max sum {max_num}, Elapsed Time {format(elapsed_time, ".3e")}')
+
 
 
 if __name__ == '__main__':
-	test_main()
+	main()
