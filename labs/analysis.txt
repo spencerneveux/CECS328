@@ -1,0 +1,8 @@
+When analyzing the performance of the four different algorithms, we first note the run time complexities.
+Freddie's algorithm runs in theta(n^3), Suzie's runs in theta(n^2), Johnnie's runs in theta(nlogn), 
+while Sally's runs in theta(n) time. We can see that as the data size grows, the difference in the
+projected value vs the observed grows for the algorithms with the worse run time complexities. 
+In the case of Freddy's algorithm, the observed values differ from the predicted values by a very large 
+amount. As the run time complexities of the algorithms get better (n^2, nlogn, n), the difference
+between the predicted values and observed values decreases. In the case of the theta(n) algorithm, 
+the average time for the largest data set is almost perfectly in line with the predicted value. 
