@@ -1,0 +1,85 @@
+Big-Oh Notation
+
+We say that f(n) = O(g(n)) IFF there are constants C > 0 and
+k>=0 such that 
+
+abs(f(n)) <= Cabs(g(n))
+
+whenever x >= k. This statement above reads as f(n) is big-oh of 
+g(n)
+
+The values C and k are called witnesses; g(n) is an upper bound 
+of f(n). 
+
+Example: Show that the function f(n) = n^2+2n+1 is O(n^2). That 
+means find a value for C and k such that f(n) <= C*g(n) whenever 
+n>=k
+
+So to do this, we set an inequality first.
+
+n^2+2n+1 <= nothing
+
+Then we start adding terms to the right hand side of the 
+inequality. Specifically, values of which we are looking to 
+obtain. In this case that would be n^2 since we want O(n^2)
+
+n^2+2n+1 <= n^2, n>=1
+
+=> 
+
+n^2+2n+1 <= n^2+2n^2
+
+=>
+
+n^2+2n+1 <= n^2+2n^2+n^2
+
+=>
+
+n^2+2n+1 <= 4n^2
+
+So now we end up with C=4 and k=1
+
+There are other important bounds to take note of
+
+Big-Omega: which states... abs(f(n)) >= C*abs(g(n))
+
+This is a lower bounds
+
+Big-Theta: which states...f and g have the same order of growth. 
+They are equal
+
+little-o: which takes the lim n->infinity f(n)/g(n) = 0
+
+little-omega: lim n->infinity f(n)/g(n) = infinity
+
+We can also examine the properties associated with comparing 
+asymptotic growths of functions.
+
+Reflexive: Big-oh, big-omega, big-theta are all reflexive. 
+Meaning f(n)=O(f(n)), etc
+
+Symmetric: This applies only to Big-Theta
+
+Transitive: Applies to all of the growth functions
+
+Transpose Symmetric: f(n)=O(g(n)) iff g(n)=big-omega(f(n))
+
+this basically means f(n) is upper bounded by g(n) iff g(n) is 
+lower bounded by f(n)
+
+We can also think about these asymptotic functions with typical 
+mathematical comparisons
+
+Big-Oh: a <= b
+
+Big-Omega: a >= b
+
+Big-Theta: a = b
+
+little-oh: a < b
+
+little-omega: a > b
+
+
+
+
