@@ -1,5 +1,6 @@
 import random
 import struct
+import time
 
 # Method to collect name of file to open
 def collect_input():
@@ -31,12 +32,23 @@ def create_bin():
 			file.write(struct.pack('i', random.randint(0, 1000000000)))
 
 # Method to check if array is in non-decreasing order
-def isOrdered(array):
+def is_ordered(array):
 	for i in range(1, len(array)):
 		if array[i-1] > array[i]:
 			return False
 	return True
 
+# Insertion Sort method
+def insertion_sort(array):
+	for i in range(1, len(array)):
+		key = array[i]
+		j = i-1
+
+		while j >= 0 and key < array[j]:
+			array[j+1] = array[j]
+			j -= 1
+		array[j+1] = key
+	return array
 
 
 
@@ -44,9 +56,18 @@ def isOrdered(array):
 # Test
 # ------------
 def main():
-	create_bin()
+	# Collect file_name to be read
 	file_name = collect_input()
-	read_bin(file_name)
+	original_1 = read_bin(file_name)
+	print(f'Array Ordered: {is_ordered(original_1)}')
+
+	# Time insertion sort
+	time_1 = time.clock()
+	original_1 = insertion_sort(original_1)
+	elapsed_time = time.clock() - time_1
+	print(f'Array Ordered: {is_ordered(original_1)}, Time Taken: {format(elapsed_time, ".2e")}')
+	print(original_1)
+
 
 if __name__ == '__main__':
 	main()
