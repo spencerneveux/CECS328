@@ -1,0 +1,26 @@
+There are three main steps in the loop invariant process.
+
+1) Initialization: It is true prior to the first loop iteration
+
+2) Maintenance: It is true before an iteration of the loop, it remains true before the next iteration.
+
+3) Termination: When the loop terminates, the invariant gives us a useful property to help show that the
+algorithm is correct.
+
+We can think of the loop invariant process as similar to mathematical induction. Essentially, the 
+initialization step can be thought of as similar to the base case. While the maintenance step 
+can be thought of as being similar to the inductive step. 
+
+
+Example) Lets look at the case of Insertion sort. How would we prove that it provides the correct
+answer?
+
+1) Initialization: The subarray starts with the first element of the array, and is sorted to begin with
+
+2) Maintenance: Each iteration of the loop expands the subarray, but keeps the sorted property. An 
+element V get inserted into the array only when it is greater than the element to its left. Since
+the elements to the left have already been sorted, it means V is greater than all the elements to its
+left. Therefore the array is still sorted. 
+
+3) Termination: The code will terminate once i reaches the last element in the array. This means that 
+the sorted subarray has been expanded to include element V 
