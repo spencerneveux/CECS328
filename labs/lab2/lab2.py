@@ -1,6 +1,7 @@
 import random
 import struct
 import time
+from statistics import mean
 
 # Method to collect name of file to open
 def collect_input():
@@ -18,10 +19,9 @@ def read_bin(file_name):
 			original.append(element[0])
 		return original
 
-
 # Methods to create binary files
 def create_random_bin():
-	NUM_INTEGERS = 100000
+	NUM_INTEGERS = 10000
 	with open('random.bin', 'wb') as file:
 
 		file.write(struct.pack('i', NUM_INTEGERS))
@@ -30,7 +30,7 @@ def create_random_bin():
 			file.write(struct.pack('i', random.randint(0, 1000000000)))
 
 def create_sorted_bin():
-	NUM_INTEGERS = 100000
+	NUM_INTEGERS = 10000
 	with open('sorted.bin', 'wb') as file:
 
 		file.write(struct.pack('i', NUM_INTEGERS))
@@ -39,7 +39,7 @@ def create_sorted_bin():
 			file.write(struct.pack('i', i))
 
 def create_reverse_bin():
-	NUM_INTEGERS = 100000
+	NUM_INTEGERS = 10000
 	with open('reverse.bin', 'wb') as file:
 
 		file.write(struct.pack('i', NUM_INTEGERS))
@@ -91,13 +91,13 @@ def swap(array, pos1, pos2):
 # Insertion Sort method
 def insertion_sort(array):
 	for i in range(1, len(array)):
-		key = array[i]
-		j = i-1
-
-		while j >= 0 and key < array[j]:
-			array[j+1] = array[j]
-			j -= 1
-		array[j+1] = key
+		temp = array[i]
+		for j in range(i-1, -1, -1):
+			if array[j] > temp:
+				array[j+1] = array[j]
+			else:
+				break
+		array[j+1] = temp
 	return array
 
 # Quick Sort method
@@ -112,71 +112,58 @@ def quickSort(array, left, right):
 
 # ------------
 # Buffer VM
+# Methods to prepare virtual machine
 # ------------
 def buffer_insertion():
 	array_sorted = read_bin('sorted.bin')
 	for i in range(5):
 		insertion_sort(array_sorted)
 
-	array_random = read_bin('random.bin')
-	for i in range(5):
-		insertion_sort(array_random)
-
-	array_reverse = read_bin('reverse.bin')
-	for i in range(5):
-		insertion_sort(array_reverse)
-
 def buffer_quick():
 	array_sorted = read_bin('sorted.bin')
 	for i in range(5):
-		quick_sort(array_sorted)
-
-	array_random = read_bin('random.bin')
-	for i in range(5):
-		quick_sort(array_random)
-
-	array_reverse = read_bin('reverse.bin')
-	for i in range(5):
-		quick_sort(array_reverse)
-
-# ------------
-# Tester
-# ------------
-def test_main():
-	# Quick Sort
-	quick_list_1 = [-21, 22, 48, 74, 92, 7, 28, 19, -21, 29, 39, 44, 76, 46]
-	quick_list_2 = [5, 3, 2, 1, -91, 64, 27, 88, 91]
-	quick_list_3 = [-81, 22, 45, 27, 34, 98, 67]
-
-	n1 = len(quick_list_1)
-	n2 = len(quick_list_2)
-	n3 = len(quick_list_3)
-
-	quickSort(quick_list_1,0,n1-1) 
-	print ("Sorted array is:") 
-	print(quick_list_1)
+		quick_sort(array_sorted, 0, len(array_sorted)-1)
 
 # ------------
 # Test
 # ------------
 def main():
-	# Create binary files
+	# # Create binary files
 	create_sorted_bin()
 	create_reverse_bin()
 	create_random_bin()
 
 	# Collect file_name to be read
 	file_name = collect_input()
-	original_1 = read_bin(file_name)
-	print(f'Array Ordered: {is_ordered(original_1)}')
+	original = read_bin(file_name)
+
+	# Make copies of original array
+	insertion_array = original[:]
+	quick_array = original[:]
 
 	# # Time insertion sort
-	# time_1 = time.clock()
-	# original_1 = insertion_sort(original_1)
-	# elapsed_time = time.clock() - time_1
-	# print(f'Array Ordered: {is_ordered(original_1)}, Time Taken: {format(elapsed_time, ".2e")}')
-	# print(original_1)
+	time_i = []
+	for i in range(10):
+		print(f'Array Ordered: {is_ordered(insertion_array)}')
+		time_1 = time.clock()
+		insertion_array = insertion_sort(insertion_array)
+		elapsed_time = time.clock() - time_1
+		time_i.append(elapsed_time)
+		print(f'Array Ordered: {is_ordered(insertion_array)}, Time Taken Insertion Sort: {format(elapsed_time, ".3e")}')
+		insertion_array = original[:]
+	print(f'Sorted time array {time_i}, Avg = {mean(time_i)}')
 
+	# # Time quick sort
+	time_q = []
+	for i in range(10):
+		print(f'Array Ordered: {is_ordered(quick_array)}')
+		time_1 = time.clock()
+		quickSort(quick_array, 0, len(quick_array) -1)
+		elapsed_time = time.clock() - time_1
+		time_q.append(elapsed_time)
+		print(f'Array Ordered: {is_ordered(quick_array)}, Time Taken Quick Sort: {format(elapsed_time, ".2e")}')
+		quick_array = original[:]
+	print(f'Sorted time array {time_q}, Avg = {mean(time_q)}')
 
 if __name__ == '__main__':
 	main()
