@@ -1,8 +1,6 @@
 import random
 import struct
 import time
-import math
-from statistics import median
 
 # Method to collect name of file to open
 def collect_input():
@@ -40,6 +38,39 @@ def is_ordered(array):
 			return False
 	return True
 
+# Method to find the median of three
+def median3(array, left, right):
+    mid = (left+right-1)//2
+    a = array[left]
+    b = array[mid]
+    c = array[right-1]
+    if a <= b <= c:
+        return mid
+    if c <= b <= a:
+        return mid
+    if a <= c <= b:
+        return right-1
+    if b <= c <= a:
+        return right-1
+    return left
+
+# Method to partition list
+def partition(array, left, right, pi):
+	swap(array, pi, right)
+	pivot_value = array[right]
+	store = left
+	for i in range(left, right):
+		if array[i] <= pivot_value:
+			swap(array, store, i)
+			store = store+1
+	swap(array, store, right)
+	return store
+
+# Method to swap elements in list
+def swap(array, pos1, pos2):
+	array[pos1], array[pos2] = array[pos2], array[pos1]
+	return array
+
 # Insertion Sort method
 def insertion_sort(array):
 	for i in range(1, len(array)):
@@ -53,62 +84,14 @@ def insertion_sort(array):
 	return array
 
 # Quick Sort method
-def quick_sort(array, start, end):
-	if len(array) < 5:
+def quickSort(array, left, right):
+	if len(array) < 10:
 		insertion_sort(array)
-		return array
-	pivot_index = median3(array)
-	pivot_index = partition(array, start, end, pivot_index)
-	# quick_sort(array, start, pivot_index+1)
-	# quick_sort(array, pivot_index-1, end)
-
-
-# Method to find median3 of array
-def median3(array):
-	if len(array) < 3:
-		return median(array)
-	median_list = []
-	center = math.floor(len(array)/2)
-	# Get first/last/center element from array
-	median_list.append(array[0])
-	median_list.append(array[-1])
-	median_list.append(array[center])
-	print(f'The median list is: {median_list}')
-	print(f'The pivot is: {median(median_list)}')
-	median_value = median(median_list)
-	return array.index(median_value)
-
-# def median3(array):
-# 	a = array[0]
-# 	b = math.floor(len(array)/2)
-# 	c = array[-1]
-
-# 	if a <= b <= c or c <= b <= a:
-# 		return array.index(b)
-# 	elif b <= a <= c or c <= a <= b:
-# 		return array.index(a)
-# 	else:
-# 		return array.index(c)
-
-
-# Method to partition list
-def partition(array, left, right, pivotIndex):
-	pivot_value = array[pivotIndex]
-	swap(array, pivotIndex, right)
-
-	store = left
-	for i in range(left, right+1):
-		if array[i] <= pivot_value:
-			swap(array, store, i)
-			store += 1
-	swap(array, right, store)
-	print(f'The array is now: {array}')
-	return store
-
-# Method to swap elements in list
-def swap(array, pos1, pos2):
-	array[pos1], array[pos2] = array[pos2], array[pos1]
-	return array
+	if left < right:
+		pi = median3(array, left, right) 
+		pivot_index = partition(array, left, right, pi) 
+		quickSort(array, left, pivot_index-1) 
+		quickSort(array, pivot_index+1, right)
 
 # ------------
 # Buffer VM
@@ -143,18 +126,18 @@ def buffer_quick():
 # Tester
 # ------------
 def test_main():
-	# partition_list = [-81, 22, 45, 27, 34, 98, 67]
-	# print(f'The partition list is: {partition_list}')
-	# pivot_index = median3(partition_list)
-	# print(f'The pivot index is : {pivot_index}')
-	# store = partition(partition_list, 0, len(partition_list)-1, pivot_index)
-
 	# Quick Sort
 	quick_list_1 = [-21, 22, 48, 74, 92, 7, 28, 19, -21, 29, 39, 44, 76, 46]
-	quick_list_2 = [5, 3, 2, 1]
-	sorted_array = quick_sort(quick_list_1, 0, len(quick_list_1) -1)
-	# sorted_array = quick_sort(quick_list_2, 0, len(quick_list_2)-1)
-	print(sorted_array)
+	quick_list_2 = [5, 3, 2, 1, -91, 64, 27, 88, 91]
+	quick_list_3 = [-81, 22, 45, 27, 34, 98, 67]
+
+	n1 = len(quick_list_1)
+	n2 = len(quick_list_2)
+	n3 = len(quick_list_3)
+
+	quickSort(quick_list_1,0,n1-1) 
+	print ("Sorted array is:") 
+	print(quick_list_1)
 
 # ------------
 # Test
