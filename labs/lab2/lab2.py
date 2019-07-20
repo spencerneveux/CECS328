@@ -7,29 +7,46 @@ def collect_input():
 	user_input = input('Enter name of file to open: ')
 	return user_input
 
-# Method to open bin file and read contents
+# Method to read binary file
 def read_bin(file_name):
 	original = []
 	with open(file_name, 'rb') as file:
 		data = file.read()
-		size = struct.unpack('i', data[0:4])
-		for i in range(4, size[0]+4):
+		size = struct.unpack('i', data[0:4])[0]
+		for i in range(4, size*4+4, 4):
 			element = struct.unpack('i', data[i:i+4])
 			original.append(element[0])
-		print(original)
 		return original
 
-# Method to create binary file
-def create_bin():
 
-	NUM_INTEGERS = 4
-
-	with open('file.bin', 'wb') as file:
+# Methods to create binary files
+def create_random_bin():
+	NUM_INTEGERS = 100000
+	with open('random.bin', 'wb') as file:
 
 		file.write(struct.pack('i', NUM_INTEGERS))
 
-		for i in range(NUM_INTEGERS):
+		for i in range(NUM_INTEGERS+1):
 			file.write(struct.pack('i', random.randint(0, 1000000000)))
+
+def create_sorted_bin():
+	NUM_INTEGERS = 100000
+	with open('sorted.bin', 'wb') as file:
+
+		file.write(struct.pack('i', NUM_INTEGERS))
+
+		for i in range(1, NUM_INTEGERS+1):
+			file.write(struct.pack('i', i))
+
+def create_reverse_bin():
+	NUM_INTEGERS = 100000
+	with open('reverse.bin', 'wb') as file:
+
+		file.write(struct.pack('i', NUM_INTEGERS))
+
+		for i in reversed(range(1, NUM_INTEGERS+1)):
+			file.write(struct.pack('i', i))
+
 
 # Method to check if array is in non-decreasing order
 def is_ordered(array):
@@ -143,19 +160,24 @@ def test_main():
 # Test
 # ------------
 def main():
+	# Create binary files
+	create_sorted_bin()
+	create_reverse_bin()
+	create_random_bin()
+
 	# Collect file_name to be read
 	file_name = collect_input()
 	original_1 = read_bin(file_name)
 	print(f'Array Ordered: {is_ordered(original_1)}')
 
-	# Time insertion sort
-	time_1 = time.clock()
-	original_1 = insertion_sort(original_1)
-	elapsed_time = time.clock() - time_1
-	print(f'Array Ordered: {is_ordered(original_1)}, Time Taken: {format(elapsed_time, ".2e")}')
-	print(original_1)
+	# # Time insertion sort
+	# time_1 = time.clock()
+	# original_1 = insertion_sort(original_1)
+	# elapsed_time = time.clock() - time_1
+	# print(f'Array Ordered: {is_ordered(original_1)}, Time Taken: {format(elapsed_time, ".2e")}')
+	# print(original_1)
 
 
 if __name__ == '__main__':
-	test_main()
+	main()
 
