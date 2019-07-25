@@ -27,7 +27,7 @@ def create_random_bin():
 		file.write(struct.pack('i', NUM_INTEGERS))
 
 		for i in range(NUM_INTEGERS+1):
-			file.write(struct.pack('i', random.randint(0, 1000000000)))
+			file.write(struct.pack('i', random.randint(0, 100000)))
 
 def create_sorted_bin():
 	NUM_INTEGERS = 10000
@@ -89,21 +89,27 @@ def swap(array, pos1, pos2):
 	return array
 
 # Insertion Sort method
-def insertion_sort(array):
-	for i in range(1, len(array)):
+def insertion_sort(array, left, right):
+	for i in range(left+1, right+1):
+		j2 = i-1
 		temp = array[i]
-		for j in range(i-1, -1, -1):
+		for j in range(i-1, left-2, -1):
+
+			j2 = j
+			if j == left-1:
+				break
+
 			if array[j] > temp:
 				array[j+1] = array[j]
 			else:
 				break
-		array[j+1] = temp
+		array[j2+1] = temp
 	return array
 
 # Quick Sort method
 def quickSort(array, left, right):
-	if len(array) < 10:
-		insertion_sort(array)
+	if (right-left) < 10:
+		insertion_sort(array, left, right)
 	if left < right:
 		pi = median3(array, left, right) 
 		pivot_index = partition(array, left, right, pi) 
@@ -146,7 +152,7 @@ def main():
 	for i in range(10):
 		print(f'Array Ordered: {is_ordered(insertion_array)}')
 		time_1 = time.clock()
-		insertion_array = insertion_sort(insertion_array)
+		insertion_array = insertion_sort(insertion_array, 0, len(insertion_array) -1)
 		elapsed_time = time.clock() - time_1
 		time_i.append(elapsed_time)
 		print(f'Array Ordered: {is_ordered(insertion_array)}, Time Taken Insertion Sort: {format(elapsed_time, ".3e")}')
