@@ -47,11 +47,9 @@ class HashSet:
 			# Else keep searching next index
 			else:
 				i = self.probingFunction(count)
-				new_val = value + i
-				index = self.calculateIndex(new_val)
+				index = (index + i) % self.m_count
 				table_val, is_nil = self.m_table[index]
 				count += 1
-		# If set doesn't contain element return False and last index it could be
 		return False, index
 
 	# Removes given value from set
@@ -81,7 +79,7 @@ class HashSet:
 		return n / self.m_count
 
 	def probingFunction(self, i):
-		return ((math.pow(i, 2) + i )/ 2)
+		return int(((math.pow(i, 2) + i )/ 2))
 
 	def calculateIndex(self, value):
 		hash_val = hash(value)
@@ -98,7 +96,7 @@ class HashSet:
 			# Get tuple from old table
 			val, nil = value
 
-			if nil != None:
+			if nil != None or nil != True:
 
 				# Calculate new index for val
 				index = self.calculateIndex(val)
@@ -116,21 +114,47 @@ class HashSet:
 					# Else keep searching next index
 					else:
 						i = self.probingFunction(count)
-						new_val = val + i
-						index = self.calculateIndex(new_val)
+						index = (index + i) % self.m_count
 						table_val, is_nil = new_mtable[index]
 						count += 1
-			else: 
-				continue	
 
 		self.m_table = new_mtable[:]
 		return
 
-
 # ------------------
-# Test 
+# Main 
 # ------------------
 def main():
+	# -----------------
+	# Trump Speech
+	# -----------------
+	trump_hash = HashSet(50)
+	trump_test_set = set()
+	word_count = set()
+
+
+	with open('trump_speech.txt', 'r') as file:
+		count = 0
+		for word in file.read().split():
+			count += 1
+			word_count.add(word)
+			
+			stripped_word = re.sub(r'\W+', '', word)
+			trump_test_set.add(stripped_word)
+			trump_hash.add(stripped_word)
+
+		print(f'The original number of words are: {trump_hash.count()}')
+		print(f'Built in set stripped characters: {len(trump_test_set)}')
+		print(f'Built in set no stripped characters: {len(word_count)}')
+		print(f'Count of words : {count}')
+
+		print(trump_test_set)
+
+
+
+if __name__ == '__main__':
+	main()
+
 
 	# # -----------------
 	# # Test operations
@@ -244,7 +268,7 @@ def main():
 	# -----------------
 	# Test-Case 2
 	# -----------------
-	# # Create hash set
+	# Create hash set
 	# h2 = HashSet(2)
 
 	# # Add a value
@@ -277,32 +301,3 @@ def main():
 	# print(h2.m_table)
 
 	# print(f'The current count of the table is {h2.count()}')
-
-	# -----------------
-	# Trump Speech
-	# -----------------
-	trump_hash = HashSet(50)
-	trump_test_set = set()
-
-
-	with open('trump_speech.txt', 'r') as file:
-		for word in file.read().split():
-			stripped_word = re.sub(r'[^A-Za-z]', '', word)
-			
-			ascii_sum = 0
-			for char in stripped_word:
-				ascii_sum += ord(char)
-
-			# My set
-			trump_hash.add(ascii_sum)
-
-			# Built in set
-			trump_test_set.add(ascii_sum)
-
-		print(f'The original number of words are: {trump_hash.count()}(myset)')
-		print(f'The original number of words are: {len(trump_test_set)}(built in set)')
-
-
-
-if __name__ == '__main__':
-	main()
