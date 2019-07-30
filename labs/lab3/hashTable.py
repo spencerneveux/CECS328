@@ -4,6 +4,7 @@ import re
 class HashSet:
 	# Constructor
 	def __init__(self, table_size):
+		self.n = 0
 		# Check next power of 2
 		self.m_count = self.next_power_of_2(table_size)
 		self.m_table = [(None, None)]*self.m_count
@@ -19,7 +20,8 @@ class HashSet:
 		in_set, index = self.find(value)
 
 		if in_set == False:
-			self.m_table[index] = (value, False)	
+			self.m_table[index] = (value, False)
+			self.n += 1	
 		return 
 
 	# Returns true if value is present in set
@@ -57,33 +59,8 @@ class HashSet:
 		in_set, index = self.find(value)
 		if in_set == True:
 			self.m_table[index] = (value, True)
+			self.n -= 1
 		return
-
-	# Returns next power 2 greater than or equalt to x
-	def next_power_of_2(self, x):
-		return 1 if x == 0 else 2**math.ceil(math.log2(x))
-
-	# Returns num values in table
-	def count(self):
-		count = 0
-		for tup in self.m_table:
-			value, is_nil = tup
-			if is_nil == False:
-				count += 1
-
-		return count
-
-	# Returns load factor of table
-	def loadFactor(self):
-		n = self.count()
-		return n / self.m_count
-
-	def probingFunction(self, i):
-		return int(((math.pow(i, 2) + i )/ 2))
-
-	def calculateIndex(self, value):
-		hash_val = hash(value)
-		return hash_val % self.m_count
 
 	# Resizes table and re-hash/insert elements
 	def resizeTable(self):
@@ -121,6 +98,27 @@ class HashSet:
 		self.m_table = new_mtable[:]
 		return
 
+	# Returns next power 2 greater than or equalt to x
+	def next_power_of_2(self, x):
+		return 1 if x == 0 else 2**math.ceil(math.log2(x))
+
+	# Returns count of elements in table
+	def count(self):
+		return self.n
+
+	# Returns load factor of table
+	def loadFactor(self):
+		return self.n / self.m_count
+
+	# Returns the probing function for current i
+	def probingFunction(self, i):
+		return int(((math.pow(i, 2) + i )/ 2))
+
+	# Returns index 
+	def calculateIndex(self, value):
+		hash_val = hash(value)
+		return hash_val % self.m_count
+
 # ------------------
 # Main 
 # ------------------
@@ -145,159 +143,8 @@ def main():
 
 		print(f'The original number of words are: {trump_hash.count()}')
 		print(f'Built in set stripped characters: {len(trump_test_set)}')
-		print(f'Built in set no stripped characters: {len(word_count)}')
 		print(f'Count of words : {count}')
-
-		print(trump_test_set)
-
 
 
 if __name__ == '__main__':
 	main()
-
-
-	# # -----------------
-	# # Test operations
-	# # -----------------
-
-	# # Create a hashset with table size 10
-	# h = HashSet(5)
-	# print(h.m_table)
-
-	# # Calculate the count of filled values
-	# print(f'The count is currently: {h.count()}')
-
-	# # Determine load factor for table
-	# print(f'Load factor: {h.loadFactor()}')
-
-	# # -----------------
-	# # Test Add
-	# # -----------------
-
-	# # Add value to table
-	# h.add(16)
-	# print(h.m_table)
-
-	# # Add another value to table
-	# h.add(23)
-	# print(h.m_table)
-
-	# # Add same value to table
-	# h.add(23)
-	# print(h.m_table)
-
-	# # Add another value
-	# h.add(32)
-	# print(h.m_table)
-
-	# # Add another value
-	# h.add(40)
-	# print(h.m_table)
-
-	# # Add another value
-	# h.add(48)
-	# print(h.m_table)
-
-	# # Add another value
-	# h.add(56)
-	# print(h.m_table)
-
-	# # Add another value
-	# h.add(64)
-	# print(h.m_table)
-
-	# # Add another value
-	# h.add(72)
-	# print(h.m_table)
-
-	# # Add another collision value
-	# h.add(80)
-	# print(h.m_table)
-
-	# # Add another collision value
-	# h.add(0)
-	# print(h.m_table)
-
-	# # -----------------
-	# # Test Find
-	# # -----------------
-
-	# # First index
-	# print(f'Find result: {h.find(16)}')
-
-	# # Next index
-	# print(f'Find result: {h.find(23)}')
-
-	# # Next ith index
-	# print(f'Find result: {h.find(64)}')
-
-	# # Last index
-	# print(f'Find result: {h.find(72)}')
-	# print(f'Find result: {h.find(80)}')
-
-	# # Value not in set
-	# print(f'Find result: {h.find(84)}')
-	# print(f'Find result: {h.find(0)}')
-
-
-
-	# # -----------------
-	# # Test Remove
-	# # -----------------
-
-	# # Remove index 0
-	# h.remove(16)
-	# print(f'Remove result:\n {h.m_table}')
-
-	# # Remove next value
-	# h.remove(23)
-	# print(f'Remove result:\n {h.m_table}')
-
-	# # Remove next value
-	# h.remove(64)
-	# print(f'Remove result:\n {h.m_table}')
-
-	# # Remove next value
-	# h.remove(72)
-	# print(f'Remove result:\n {h.m_table}')
-
-	# # Remove same value
-	# h.remove(72)
-	# print(f'Remove result:\n {h.m_table}')
-
-	# -----------------
-	# Test-Case 2
-	# -----------------
-	# Create hash set
-	# h2 = HashSet(2)
-
-	# # Add a value
-	# h2.add(2)
-	# print(h2.m_table)
-
-	# # Add some more values
-	# h2.add(4)
-	# h2.add(1234)
-	# h2.add(-21)
-	# h2.add(92)
-	# print(h2.m_table)
-
-	# # Remove some values
-	# h2.remove(4)
-	# h2.remove(92)
-	# print(h2.m_table)
-
-	# # Find some values
-	# print(h2.find(4))
-	# print(h2.find(92))
-	# print(h2.find(1234))
-
-	# # Put some values back in
-	# h2.add(4)
-	# print(h2.m_table)
-
-	# # Add some collision values
-	# h2.add(12)
-	# print(h2.m_table)
-
-	# print(f'The current count of the table is {h2.count()}')
